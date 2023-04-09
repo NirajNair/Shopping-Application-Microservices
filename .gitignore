@@ -30,6 +30,7 @@ HELP.md
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+!**/.mvn/
 
 .apt_generated
 .classpath

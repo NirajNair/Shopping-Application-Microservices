@@ -1,5 +1,5 @@
 ## Stops docker-compose (if running), builds all projects and starts docker compose
-up_build: build_product build_order
+up_build: build_product build_order build_inventory
 	@echo Stopping docker images
 	docker-compose down
 	@echo Building and starting docker images...
@@ -17,3 +17,9 @@ build_order:
 	@echo Building order-service executable
 	chdir order-service && mvn clean package
 	@echo Built order-service executable
+
+## Builds inventory-service executable
+build_inventory:
+	@echo Building inventory-service executable
+	chdir inventory-service && mvn clean package
+	@echo Built inventory-service executable

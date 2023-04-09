@@ -45,12 +45,6 @@ class ProductServiceApplicationTests {
 	}
 
 	@Test
-	void shouldGetAllProduct() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/product"))
-				.andExpect(status().isOk());
-	}
-
-	@Test
 	void shouldCreateProduct() throws Exception {
 		ProductRequest productRequest = getProductRequest();
 		String productRequestString = objectMapper.writeValueAsString(productRequest);
@@ -61,6 +55,12 @@ class ProductServiceApplicationTests {
 				.andExpect(status().isCreated());
 
 		Assertions.assertEquals(1, productRepository.findAll().size());
+	}
+
+	@Test
+	void shouldGetAllProduct() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/product"))
+				.andExpect(status().isOk());
 	}
 
 	private ProductRequest getProductRequest(){

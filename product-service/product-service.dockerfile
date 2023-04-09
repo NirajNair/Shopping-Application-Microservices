@@ -1,5 +1,4 @@
-FROM openjdk
-
-COPY ./target/*.jar product-service.jar
-
-ENTRYPOINT ["java", "-jar", "/product-service.jar"]
+FROM openjdk:19-jdk-slim
+ARG JAR_FILE=product-service/target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]

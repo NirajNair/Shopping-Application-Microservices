@@ -2,22 +2,30 @@ version: '3'
 services:
   product-service:
     build:
-      context: product-service
       dockerfile: product-service/product-service.dockerfile
     restart: always
     ports:
-      - "8080:8080"
+      - "8083:8080"
     deploy:
       mode: replicated
       replicas: 1
 
   order-service:
     build:
-      context: order-service
       dockerfile: order-service/order-service.dockerfile
     restart: always
     ports:
-      - "8081:8080"
+      - "8084:8080"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  inventory-service:
+    build:
+      dockerfile: inventory-service/inventory-service.dockerfile
+    restart: always
+    ports:
+      - "8090:8080"
     deploy:
       mode: replicated
       replicas: 1
@@ -33,7 +41,7 @@ services:
     volumes:
       - ./db-data/mongo/:/data/db
 
-  mysql:
+  mysql-orders:
     image: 'mysql:8.0.32'
     ports:
       - "3306:3306"
@@ -42,6 +50,17 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: orders
-
     volumes:
-      - ./db-data/mysql/:/data/db
+      - ./db-data/mysql-order/:/data/db
+
+  mysql-inventory:
+    image: 'mysql:8.0.32'
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: inventory
+    volumes:
+      - ./db-data/mysql-inventory/:/data/db
