@@ -20,12 +20,12 @@ public class CartService {
     private final CartRepository cartRepository;
 
     public void addItemsToCart(CartRequest cartRequest) {
-       Optional<Cart> userCart = cartRepository.findByUserId(cartRequest.getUserId());
+       Optional<Cart> userCart = cartRepository.findByUserIdWithCartItems(cartRequest.getUserId());
        if(userCart.isPresent()) {
            Cart cart = userCart.get();
            List<CartItem> cartItemList = cart.getCartItems();
 
-           if(cartItemList.size() > 0) {
+           if(cartItemList != null) {
                Optional<CartItem> optionalCartItem = cartItemList.stream()
                        .filter(cartItem -> cartItem != null && cartItem.getSkuCode().equals(cartRequest.getSkuCode()))
                        .findFirst();
@@ -43,9 +43,17 @@ public class CartService {
                    cartItemList.add(newCartItem);
                    cart.setCartItems(cartItemList);
                }
+           } else {
+               CartItem newCartItem = new CartItem(
+                       cartRequest.getSkuCode(),
+                       cartRequest.getName(),
+                       cartRequest.getPrice(),
+                       cartRequest.getQuantity()
+               );
+               List<CartItem> newCartItemList = new ArrayList<>();
+               newCartItemList.add(newCartItem);
+               cart.setCartItems(newCartItemList);
            }
-
-
            cartRepository.save(cart);
        } else {
            Cart cart = new Cart();

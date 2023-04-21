@@ -5,7 +5,7 @@ spring:
     name: product-service
   data:
     mongodb:
-      uri: mongodb://admin:password@localhost:27017/products?authSource=admin
+      uri: mongodb://admin:password@localhost:27019/products?authSource=admin
 
 eureka:
   instance:
