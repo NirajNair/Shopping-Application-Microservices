@@ -1,0 +1,87 @@
+version: '3'
+services:
+  product-service:
+    build:
+      dockerfile: product-service/product-service.dockerfile
+    restart: always
+    ports:
+      - "8083:8080"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  order-service:
+    build:
+      dockerfile: order-service/order-service.dockerfile
+    restart: always
+    ports:
+      - "8084:8080"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  inventory-service:
+    build:
+      dockerfile: inventory-service/inventory-service.dockerfile
+    restart: always
+    ports:
+      - "8090:8080"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  cart-service:
+    build:
+      dockerfile: cart-service/cart-service.dockerfile
+    restart: always
+    ports:
+      - "8085:8080"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+  mongo:
+    image: 'mongo:4.4.2-bionic'
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: products
+    volumes:
+      - ./db-data/mongo/:/data/db
+
+  mongo-cart:
+    image: 'mongo:4.4.2-bionic'
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: cart
+    volumes:
+      - ./db-data/mongo-cart/:/data/db
+
+  mysql-orders:
+    image: 'mysql:8.0.32'
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: orders
+    volumes:
+      - ./db-data/mysql-order/:/data/db
+
+  mysql-inventory:
+    image: 'mysql:8.0.32'
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: inventory
+    volumes:
+      - ./db-data/mysql-inventory/:/data/db
